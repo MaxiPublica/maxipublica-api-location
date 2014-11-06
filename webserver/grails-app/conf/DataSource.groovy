@@ -41,3 +41,36 @@ environments {
         }
     }
 }
+/*Para mongo*/
+/*
+environments {
+    development {
+        grails {
+            mongo {
+                host = "localhost"
+                databaseName = "mp_catalogo"
+            }
+        }
+    }
+    test {
+        grails {
+            mongo {
+                host = "localhost"
+                databaseName = "mp_catalogo"
+            }
+        }
+    }
+    production {
+        grails {
+            mongo {
+
+                // replicaSet = []
+                host = "localhost"
+                username = ""
+                password = ""
+                databaseName = "mp_catalogo"
+            }
+        }
+    }
+}
+*/
