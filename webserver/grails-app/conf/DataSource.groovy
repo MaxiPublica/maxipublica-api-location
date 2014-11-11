@@ -1,4 +1,4 @@
-dataSource {
+/*dataSource {
     pooled = true
     driverClassName = "org.h2.Driver"
     username = "sa"
@@ -40,15 +40,15 @@ environments {
             }
         }
     }
-}
+}*/
 /*Para mongo*/
-/*
+
 environments {
     development {
         grails {
             mongo {
                 host = "localhost"
-                databaseName = "mp_catalogo"
+                databaseName = "mp_locations"
             }
         }
     }
@@ -56,7 +56,7 @@ environments {
         grails {
             mongo {
                 host = "localhost"
-                databaseName = "mp_catalogo"
+                databaseName = "mp_locations"
             }
         }
     }
@@ -68,9 +68,8 @@ environments {
                 host = "localhost"
                 username = ""
                 password = ""
-                databaseName = "mp_catalogo"
+                databaseName = "mp_locations"
             }
         }
     }
 }
-*/

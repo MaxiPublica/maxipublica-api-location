@@ -1,4 +1,4 @@
-package api.categories.exceptions
+package api.locations.exceptions
 import javax.servlet.http.HttpServletResponse
 
 class NotFoundException extends RuntimeException {

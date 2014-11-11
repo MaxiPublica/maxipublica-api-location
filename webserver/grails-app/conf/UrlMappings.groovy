@@ -1,6 +1,6 @@
 class UrlMappings {
 	static mappings = {
-		"/$location?" {
+		"/$locationId?" {
 			controller = "Location"
 			action = [GET: 'getLocation', POST:'createLocation',PUT:'modifyLocation' ,DELETE: 'notAllowed']
 		}
