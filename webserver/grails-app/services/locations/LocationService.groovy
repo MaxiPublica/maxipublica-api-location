@@ -35,20 +35,58 @@ class LocationService {
 			)
 		}
 
+        def parentLocation
+        
 		if(location.parentLocationId){
-			def parentLocation = Location.findByLocationID(location.parentLocationId)
-			resultParentLocation.id = parentLocation.locationID
-			resultParentLocation.name = parentLocation.name
+			parentLocation = getParentLocation(location.parentLocationId)
+            //Location.findByLocationID(location.parentLocationId)
+			//resultParentLocation.id = parentLocation.locationID
+			//resultParentLocation.name = parentLocation.name
 		}
 
 		jsonResult.id = location.locationID
 		jsonResult.name = location.name
-		jsonResult.parent_location = resultParentLocation
+		jsonResult.parent_location = parentLocation
 		jsonResult.children_locations = jsonChildren
 
 		jsonResult
 
 	}
+
+    def getParentLocation(def parentLocationId){
+
+        def resultParentsLocations = []
+
+        while (parentLocationId){
+            
+            def parent = getParent(parentLocationId)
+
+            resultParentsLocations.add(
+                location_id : parent.location_id,
+                name : parent.name
+            )
+            
+            parentLocationId = parent.parent_location_id
+        }
+        
+        resultParentsLocations
+    }
+
+    def getParent(def parentLocationId){
+
+        def jsonParent = [:]
+
+        if (parentLocationId){
+
+            def parentLocation = Location.findByLocationID(parentLocationId)
+
+            jsonParent.location_id = parentLocation.locationID
+            jsonParent.name = parentLocation.name
+            jsonParent.parent_location_id = parentLocation.parentLocationId
+        }
+
+        jsonParent
+    }
 
 	def createLocation(def parentlocationId,def jsonLocation){
 
