@@ -9,11 +9,11 @@ import grails.plugin.gson.converters.GSON
 import api.locations.exceptions.BadRequestException
 import api.locations.exceptions.ConflictException
 import api.locations.exceptions.NotFoundException
-import locations.LocationService
+import locations.ZipcodesService
 
-class LocationController {
+class ZipcodesController {
 
-	def LocationService
+    def ZipcodesService
 
 	def setHeaders(){
 		response.setContentType "application/json; charset=utf-8"
@@ -60,40 +60,18 @@ class LocationController {
 		render mapResult as GSON
 	}
 
-	def getLocation(){
+	def getZip(){
 
-		def locationId = params.locationId
+		def zipId = params.zipId
 		def result
 
 		setHeaders()
 
 		try{
-			result = LocationService.getLocation(locationId)
-			response.setStatus(HttpServletResponse.SC_OK)
-			render result as GSON
-		}catch (NotFoundException e){
-
-			renderException(e)
-
-		}catch (Exception e){
-
-			renderException(e)
-		}
-	}
-
-	def createLocation(){
-
-		def locationId = params.locationId
-		def jsonLocation = request.JSON
-		def result
-
-		setHeaders()
-
-		try{
-			if(locationId){
-				result = LocationService.createLocation(locationId, jsonLocation)
+			if(zipId){
+				result = ZipcodesService.getZip(zipId)
 			}else{
-				result = LocationService.createLocation(jsonLocation)
+				result = ZipcodesService.getZip()
 			}
 			response.setStatus(HttpServletResponse.SC_OK)
 			render result as GSON
@@ -106,27 +84,4 @@ class LocationController {
 			renderException(e)
 		}
 	}
-
-	def modifyLocation(){
-
-		def locationId = params.locationId
-		def jsonLocation = request.JSON
-		def result
-
-		setHeaders()
-
-		try{
-			result = LocationService.modifyLocation(locationId, jsonLocation)
-			response.setStatus(HttpServletResponse.SC_OK)
-			render result as GSON
-		}catch (NotFoundException e){
-
-			renderException(e)
-
-		}catch (Exception e){
-
-			renderException(e)
-		}
-	}
-
 }

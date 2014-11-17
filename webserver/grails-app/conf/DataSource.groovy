@@ -1,4 +1,4 @@
-/*dataSource {
+dataSource {
     pooled = true
     driverClassName = "org.h2.Driver"
     username = "sa"
@@ -40,8 +40,8 @@ environments {
             }
         }
     }
-}*/
-/*Para mongo*/
+}
+/*Para mongo
 
 environments {
     development {
@@ -72,4 +72,4 @@ environments {
             }
         }
     }
-}
+}*/

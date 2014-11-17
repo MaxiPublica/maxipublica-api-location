@@ -9,8 +9,8 @@ import api.locations.exceptions.NotFoundException
 
 class LocationService {
 
-    static transactional = "mongo"
-	//static transactional = true
+    //static transactional = "mongo"
+	static transactional = true
 	def getLocation(def locationId){
 
 		Map jsonResult = [:]
