@@ -60,9 +60,11 @@ class ZipcodesService {
             throw new NotFoundException("The zipId not found")
 		}
 		
+		def temporalParent
+		def lo
+
 		for(temporal in zip.colonId){
-			def lo = Location.findByLocationID(temporal)
-			jsonMun = getParentLocation(lo.parentLocationId)
+			lo = Location.findByLocationID(temporal)
 			/*jsonMun = findMun(lo.parentLocationId)*/
 			lo.each{
 				jsonCol.add(
@@ -70,7 +72,11 @@ class ZipcodesService {
 					name:it.name
 				)
 			}
+			temporalParent = lo.parentLocationId
 		}
+
+		jsonMun = getParentLocation(lo.parentLocationId)
+		temporalParent = null
 
 		jsonResult.zip_code = zipId
 		jsonResult.col = jsonCol
