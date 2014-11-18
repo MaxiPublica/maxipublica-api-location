@@ -68,11 +68,49 @@ class ZipcodesController {
 		setHeaders()
 
 		try{
-			if(zipId){
-				result = ZipcodesService.getZip(zipId)
-			}else{
-				result = ZipcodesService.getZip()
-			}
+			result = ZipcodesService.getZip(zipId)
+			response.setStatus(HttpServletResponse.SC_OK)
+			render result as GSON
+		}catch (NotFoundException e){
+
+			renderException(e)
+
+		}catch (Exception e){
+
+			renderException(e)
+		}
+	}
+
+	def createZip(){
+		def colonId = params.zipId
+		def jsonZipcodes = request.JSON
+		def result
+
+		setHeaders()
+
+		try{
+			result = ZipcodesService.createZip(colonId, jsonZipcodes)
+			response.setStatus(HttpServletResponse.SC_OK)
+			render result as GSON
+		}catch (NotFoundException e){
+
+			renderException(e)
+
+		}catch (Exception e){
+
+			renderException(e)
+		}
+	}
+
+	def modifyZip(){
+		def zipId = params.zipId
+		def jsonZip = request.JSON
+		def result
+
+		setHeaders()
+
+		try{
+			result = ZipcodesService.modifyZip(zipId, jsonZip)
 			response.setStatus(HttpServletResponse.SC_OK)
 			render result as GSON
 		}catch (NotFoundException e){

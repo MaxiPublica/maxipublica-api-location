@@ -6,6 +6,8 @@ import grails.converters.*
 import api.locations.exceptions.BadRequestException
 import api.locations.exceptions.ConflictException
 import api.locations.exceptions.NotFoundException
+import locations.Zipcodes
+import locations.Location
 
 class LocationService {
 
@@ -21,19 +23,28 @@ class LocationService {
             throw new NotFoundException("You must provider locationId")
 		}
 
-		def location = Location.findByLocationID(locationId)
+		def location = Location.findByLocationID(locationId, [ sort: "name", order: "asc"])
 
 		if (!location){
             throw new NotFoundException("The locationId not found")
 		}
 
-		def childrenLocations = Location.findAllByParentLocationId(locationId)
-		childrenLocations.each{
-			jsonChildren.add(
-				locationId : it.locationID,
-				name : it.name
-			)
-		}
+		def childrenLocations = Location.findAllByParentLocationId(locationId, [ sort: "name", order: "asc"])
+		if(childrenLocations){
+            childrenLocations.each{
+                jsonChildren.add(
+                    locationId : it.locationID,
+                    name : it.name
+                )
+            }
+        }else{
+            childrenLocations = Zipcodes.findByColonId(locationId, [ sort: "zipcode", order: "asc"])
+            childrenLocations.each{
+                jsonChildren.add(
+                    zipcode : it.zipcode
+                )
+            }
+        }
 
         def parentLocation
         
@@ -78,7 +89,7 @@ class LocationService {
 
         if (parentLocationId){
 
-            def parentLocation = Location.findByLocationID(parentLocationId)
+            def parentLocation = Location.findByLocationID(parentLocationId, [ sort: "name", order: "asc"])
 
             jsonParent.location_id = parentLocation.locationID
             jsonParent.name = parentLocation.name
@@ -88,7 +99,7 @@ class LocationService {
         jsonParent
     }
 
-	def createLocation(def parentlocationId,def jsonLocation){
+	def createLocation(def parentlocationId, def jsonLocation){
 
         Map jsonResult = [:]
         def responseMenssage = ''
@@ -154,7 +165,7 @@ class LocationService {
             throw  new NotFoundException("You must provider locationId")
         }
 
-        def obteinedLocation = Location.findByLocationID(locationId)
+        def obteinedLocation = Location.findByLocationID(locationId, [ sort: "name", order: "asc"])
 
         if (!obteinedLocation){
             throw new  NotFoundException("The Location with Id="+locationId+" not found")

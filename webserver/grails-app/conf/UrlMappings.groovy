@@ -5,7 +5,7 @@ class UrlMappings {
 			action = [GET: 'getLocation', POST:'createLocation',PUT:'modifyLocation' ,DELETE: 'notAllowed']
 		}
 
-		"/cp/$zipId?" {
+		"/zip/$zipId?" {
 			controller = "Zipcodes"
 			action = [GET: 'getZip', POST:'createZip',PUT:'modifyZip' ,DELETE: 'notAllowed']
 		}

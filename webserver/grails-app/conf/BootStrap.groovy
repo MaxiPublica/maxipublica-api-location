@@ -373,8 +373,6 @@ class BootStrap {
 				)
 				cp18.save()
 
-				//-------------------------//
-
 				def cp19 = new Zipcodes(
 					zipcode:"11100",
 					colonId:"COL19"
@@ -392,7 +390,6 @@ class BootStrap {
 					colonId:"COL21"
 				)
 				cp21.save()
-
 				def cp22 = new Zipcodes(
 					zipcode:"33301",
 					colonId:"COL22"
