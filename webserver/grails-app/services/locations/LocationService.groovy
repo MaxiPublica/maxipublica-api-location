@@ -11,8 +11,8 @@ import locations.Location
 
 class LocationService {
 
-    //static transactional = "mongo"
-	static transactional = true
+    static transactional = "mongo"
+	//static transactional = true
 	def getLocation(def locationId){
 
 		Map jsonResult = [:]

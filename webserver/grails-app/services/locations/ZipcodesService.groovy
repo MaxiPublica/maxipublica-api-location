@@ -14,8 +14,8 @@ import locations.Location
 
 class ZipcodesService {
 
-    //static transactional = "mongo"
-	static transactional = true
+    static transactional = "mongo"
+	//static transactional = true
 	/*def jsonCol = []
 	def jsonEst = []
 	def jsonCountry = []*/
@@ -159,17 +159,17 @@ class ZipcodesService {
         jsonParent
     }
 
-    def createZip(def colonId, def jsonZipcodes){
+    def createZip(def colon_Id, def jsonZipcodes){
     	Map jsonResult = [:]
         def responseMenssage = ''
 
-        if (!Location.findByLocationID(colonId)){
-            throw  new NotFoundException("The colonId = " + colonId + " not found")
+        if (!Location.findByLocationID(colon_Id)){
+            throw  new NotFoundException("The colonId = " + colon_Id + " not found")
         }
 
         def newZipcode =  new Zipcodes(
-            zipcode:jsonZipcodes?.zipcode,
-            colonId:colonId
+            zipcode:jsonZipcodes?.zip_code,
+            colonId:colon_Id
         )
 
         if(!newZipcode.validate()) {

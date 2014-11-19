@@ -38,31 +38,31 @@ grails.project.dependency.resolution = {
 
         compile ('joda-time:joda-time:2.3')
 
-        /*runtime('org.codehaus.groovy.modules.http-builder:http-builder:0.7') {
+        runtime('org.codehaus.groovy.modules.http-builder:http-builder:0.7') {
             excludes 'xalan'
             excludes 'xml-apis'
             excludes 'groovy'
-        }*/
+        }
         compile ('org.springframework:spring-test:3.1.2.RELEASE'){
             excludes 'groovy'
         }
     }
 
     plugins {
-        runtime ":hibernate:$grailsVersion"
+        /*runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.8.0"
         runtime ":resources:1.1.6"
         build ":tomcat:$grailsVersion"
         runtime ":database-migration:1.1"
-        compile ':cache:1.0.0'
+        compile ':cache:1.0.0'*/
 
-        /*Para mongo
+        /*Para mongo*/
         runtime ":jquery:1.8.0"
         runtime ":resources:1.1.6"
         build ":tomcat:$grailsVersion"
         compile ':cache:1.0.0'
         runtime ":mongodb:1.1.0.GA"
         runtime ":cors:1.1.4"
-        */
+        
     }
 }
