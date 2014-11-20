@@ -6,7 +6,7 @@ class BootStrap {
 		test{}
 		
 		development{
-			/*if (Location.count() == 0){
+			if (Location.count() == 0){
 				//Pais
 				def location01 = new Location(
 					locationID:"MX",
@@ -407,7 +407,7 @@ class BootStrap {
 					colonId:"COL24"
 				)
 				cp24.save()
-			}*/
+			}
 		}
 		
 		production{}

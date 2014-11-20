@@ -1,20 +1,26 @@
 package locations
 
-import javax.servlet.http.HttpServletResponse
-import grails.converters.*
-import grails.transaction.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.http.HttpMethod.*
-import grails.plugin.gson.converters.GSON
 import api.locations.exceptions.BadRequestException
 import api.locations.exceptions.ConflictException
 import api.locations.exceptions.NotFoundException
+import javax.servlet.http.HttpServletResponse
+import grails.plugin.gson.converters.GSON
+import grails.transaction.*
+import grails.converters.*
 import locations.Zipcodes
 import locations.Location
+
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+import api.locations.ValidAccess
+import org.joda.time.LocalTime;
 
 class ZipcodesService {
 
     static transactional = "mongo"
+    def validAccess = new ValidAccess()
 	//static transactional = true
 	/*def jsonCol = []
 	def jsonEst = []
@@ -159,9 +165,16 @@ class ZipcodesService {
         jsonParent
     }
 
-    def createZip(def colon_Id, def jsonZipcodes){
+    def createZip(def colon_Id, def jsonZipcodes, def params){
     	Map jsonResult = [:]
         def responseMenssage = ''
+
+        if (!params.access_token){
+            throw new BadRequestException ("You must provider de access_token")
+        }
+
+        def access_token = validAccess.validAccessToken(params.access_token)
+        def user_id = params.access_token.split('_')[2]
 
         if (!Location.findByLocationID(colon_Id)){
             throw  new NotFoundException("The colonId = " + colon_Id + " not found")
@@ -187,9 +200,16 @@ class ZipcodesService {
         jsonResult
     }
 
-    def modifyZip(def zipId, def jsonZipcode){
+    def modifyZip(def zipId, def jsonZipcode, def params){
     	Map jsonResult = [:]
         def responseMessage = ''
+
+        if (!params.access_token){
+            throw new BadRequestException ("You must provider de access_token")
+        }
+
+        def access_token = validAccess.validAccessToken(params.access_token)
+        def user_id = params.access_token.split('_')[2]
 
         if (!zipId){
             throw  new NotFoundException("You must provider zipId")

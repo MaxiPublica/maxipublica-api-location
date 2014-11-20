@@ -91,9 +91,9 @@ class LocationController {
 
 		try{
 			if(locationId){
-				result = LocationService.createLocation(locationId, jsonLocation)
+				result = LocationService.createLocation(locationId, jsonLocation, params)
 			}else{
-				result = LocationService.createLocation(jsonLocation)
+				result = LocationService.createLocation(jsonLocation, params)
 			}
 			response.setStatus(HttpServletResponse.SC_OK)
 			render result as GSON
@@ -116,7 +116,7 @@ class LocationController {
 		setHeaders()
 
 		try{
-			result = LocationService.modifyLocation(locationId, jsonLocation)
+			result = LocationService.modifyLocation(locationId, jsonLocation, params)
 			response.setStatus(HttpServletResponse.SC_OK)
 			render result as GSON
 		}catch (NotFoundException e){

@@ -1,23 +1,30 @@
 package locations
 
-import java.text.MessageFormat
 import org.apache.ivy.plugins.conflict.ConflictManager
-import grails.converters.*
 import api.locations.exceptions.BadRequestException
 import api.locations.exceptions.ConflictException
 import api.locations.exceptions.NotFoundException
+import java.text.MessageFormat
+import grails.converters.*
 import locations.Zipcodes
 import locations.Location
+
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+import api.locations.ValidAccess
 
 class LocationService {
 
     static transactional = "mongo"
+    def validAccess = new ValidAccess()
 	//static transactional = true
 	def getLocation(def locationId){
 
 		Map jsonResult = [:]
 		def jsonChildren = []
 		Map resultParentLocation = [:]
+        def zipCode = null
 
 		if (!locationId){
             throw new NotFoundException("You must provider locationId")
@@ -40,9 +47,7 @@ class LocationService {
         }else{
             childrenLocations = Zipcodes.findByColonId(locationId, [ sort: "zipcode", order: "asc"])
             childrenLocations.each{
-                jsonChildren.add(
-                    zipcode : it.zipcode
-                )
+                zipCode = it.zipcode
             }
         }
 
@@ -57,6 +62,9 @@ class LocationService {
 
 		jsonResult.id = location.locationID
 		jsonResult.name = location.name
+        if(zipCode != null){
+            jsonResult.zipcode = zipCode
+        }
 		jsonResult.parent_location = parentLocation
 		jsonResult.children_locations = jsonChildren
 
@@ -99,10 +107,17 @@ class LocationService {
         jsonParent
     }
 
-	def createLocation(def parentlocationId, def jsonLocation){
+	def createLocation(def parentlocationId, def jsonLocation, def params){
 
         Map jsonResult = [:]
         def responseMenssage = ''
+
+        if (!params.access_token){
+            throw new BadRequestException ("You must provider de access_token")
+        }
+
+        def access_token = validAccess.validAccessToken(params.access_token)
+        def user_id = params.access_token.split('_')[2]
 
         if (!Location.findByLocationID(parentlocationId)){
             throw  new NotFoundException("The locationId = "+parentlocationId+" not found")
@@ -130,10 +145,17 @@ class LocationService {
         jsonResult
     }
 
-    def createLocation(def jsonLocation){
+    def createLocation(def jsonLocation, def params){
 
         Map jsonResult = [:]
         def responseMenssage = ''
+
+        if (!params.access_token){
+            throw new BadRequestException ("You must provider de access_token")
+        }
+
+        def access_token = validAccess.validAccessToken(params.access_token)
+        def user_id = params.access_token.split('_')[2]
 
         def newLocation = new Location(
             locationID:jsonLocation?.id,
@@ -156,10 +178,17 @@ class LocationService {
         jsonResult
     }
 
-    def modifyLocation(def locationId, def jsonLocation){
+    def modifyLocation(def locationId, def jsonLocation, def params){
 
         Map jsonResult = [:]
         def responseMessage = ''
+
+        if (!params.access_token){
+            throw new BadRequestException ("You must provider de access_token")
+        }
+
+        def access_token = validAccess.validAccessToken(params.access_token)
+        def user_id = params.access_token.split('_')[2]
 
         if (!locationId){
             throw  new NotFoundException("You must provider locationId")

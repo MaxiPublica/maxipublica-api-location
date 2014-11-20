@@ -89,7 +89,7 @@ class ZipcodesController {
 		setHeaders()
 
 		try{
-			result = ZipcodesService.createZip(colonId, jsonZipcodes)
+			result = ZipcodesService.createZip(colonId, jsonZipcodes, params)
 			response.setStatus(HttpServletResponse.SC_OK)
 			render result as GSON
 		}catch (NotFoundException e){
@@ -110,7 +110,7 @@ class ZipcodesController {
 		setHeaders()
 
 		try{
-			result = ZipcodesService.modifyZip(zipId, jsonZip)
+			result = ZipcodesService.modifyZip(zipId, jsonZip, params)
 			response.setStatus(HttpServletResponse.SC_OK)
 			render result as GSON
 		}catch (NotFoundException e){
