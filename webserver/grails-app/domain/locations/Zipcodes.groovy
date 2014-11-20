@@ -10,7 +10,7 @@ class Zipcodes {
 	
     static constraints = {
     	zipcode nullable:false, blank:false
-    	colonId nullable:true, maxSize: 20
+    	colonId nullable:false, blank:false, unique:true
 		dateRegistration nullable:false
 		dateUpdate nullable:false
 		siteId nullable:false
