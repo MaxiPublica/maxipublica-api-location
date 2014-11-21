@@ -169,12 +169,12 @@ class ZipcodesService {
     	Map jsonResult = [:]
         def responseMenssage = ''
 
-        /*if (!params.access_token){
+        if (!params.access_token){
             throw new BadRequestException ("You must provider de access_token")
         }
 
         def access_token = validAccess.validAccessToken(params.access_token)
-        def user_id = params.access_token.split('_')[2]*/
+        def user_id = params.access_token.split('_')[2]
         
         if (!Location.findByLocationID(colon_Id)){
             throw  new NotFoundException("The colonId = " + colon_Id + " not found")
