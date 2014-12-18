@@ -24,6 +24,7 @@ class LocationService {
 		Map jsonResult = [:]
 		def jsonChildren = []
 		Map resultParentLocation = [:]
+        Map arrayLocation = [:]
         def zipCode = null
 
 		if (!locationId){
@@ -36,6 +37,7 @@ class LocationService {
             throw new NotFoundException("The locationId not found")
 		}
 
+        //Traeme a los hijos que me tengan como padre (darth vader)
 		def childrenLocations = Location.findAllByParentLocationId(locationId, [ sort: "name", order: "asc"])
 		if(childrenLocations){
             childrenLocations.each{
@@ -44,6 +46,7 @@ class LocationService {
                     name : it.name
                 )
             }
+        //Si no tengo hijos entonces traeme mi codigo postal correspondiente
         }else{
             childrenLocations = Zipcodes.findByColonId(locationId, [ sort: "zipcode", order: "asc"])
             childrenLocations.each{
@@ -52,45 +55,63 @@ class LocationService {
         }
 
         def parentLocation
-        
+        //Si tengo padre entonces busca a los papas de mi papa
 		if(location.parentLocationId){
+            //Traeme a mi padre incluyendo a mis antecesores
 			parentLocation = getParentLocation(location.parentLocationId)
             //Location.findByLocationID(location.parentLocationId)
 			//resultParentLocation.id = parentLocation.locationID
 			//resultParentLocation.name = parentLocation.name
 		}
 
-		jsonResult.id = location.locationID
-		jsonResult.name = location.name
-        if(zipCode != null){
+		if(zipCode != null){
+            parentLocation.add(
+                location_id:location.locationID,
+                name: location.name
+                )
+            arrayLocation.neighborhood = parentLocation[3]
+            arrayLocation.city = parentLocation[0]
+            arrayLocation.state = parentLocation[1]
+            arrayLocation.country = parentLocation[2]
+            
             jsonResult.zipcode = zipCode
+    		jsonResult.location = arrayLocation
+        }else{
+            jsonResult.id = location.locationID
+            jsonResult.name = location.name
+            jsonResult.parent_location = parentLocation
+            jsonResult.children_locations = jsonChildren
         }
-		jsonResult.parent_location = parentLocation
-		jsonResult.children_locations = jsonChildren
-
 		jsonResult
 
 	}
 
+    //Recive como parametro el id de mi papa
     def getParentLocation(def parentLocationId){
 
         def resultParentsLocations = []
 
+        //si el dato no el vacio o null entonces entra al ciclo
         while (parentLocationId){
             
+            //Realiza la busqueda de todos mis antecesores (papa, abuelo, y bisabuelo)
             def parent = getParent(parentLocationId)
 
+            //Se agregan los datos a un array para crear el json de antecesores
             resultParentsLocations.add(
                 location_id : parent.location_id,
                 name : parent.name
             )
-            
+            //se agrega el id del siguiente antecesor a la variable de control del 
+            //while, si ya no encuentra ningun antecesor entonces el ciclo se rompe
+            //de esta manera se buscan los padres
             parentLocationId = parent.parent_location_id
         }
         
         resultParentsLocations
     }
 
+    //Busca el padre correspondiente del id que se le este mandando a evaluar
     def getParent(def parentLocationId){
 
         def jsonParent = [:]
@@ -107,6 +128,8 @@ class LocationService {
         jsonParent
     }
 
+    //Metodo para crear una locacion que tenga padre, la variable de params es para poder
+    //usar la seguridad del acces token
 	def createLocation(def parentlocationId, def jsonLocation, def params){
 
         Map jsonResult = [:]
@@ -145,6 +168,8 @@ class LocationService {
         jsonResult
     }
 
+    //Metodo para crear una locacion que sea padre o raiz, la variable de params es para poder
+    //usar la seguridad del acces token
     def createLocation(def jsonLocation, def params){
 
         Map jsonResult = [:]

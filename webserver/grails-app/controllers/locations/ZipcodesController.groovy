@@ -72,11 +72,10 @@ class ZipcodesController {
 			response.setStatus(HttpServletResponse.SC_OK)
 			render result as GSON
 		}catch (NotFoundException e){
-
 			renderException(e)
-
+		}catch(BadRequestException e){
+			renderException(e)
 		}catch (Exception e){
-
 			renderException(e)
 		}
 	}
@@ -93,11 +92,10 @@ class ZipcodesController {
 			response.setStatus(HttpServletResponse.SC_OK)
 			render result as GSON
 		}catch (NotFoundException e){
-
 			renderException(e)
-
+		}catch(BadRequestException e){
+			renderException(e)
 		}catch (Exception e){
-
 			renderException(e)
 		}
 	}
@@ -114,11 +112,10 @@ class ZipcodesController {
 			response.setStatus(HttpServletResponse.SC_OK)
 			render result as GSON
 		}catch (NotFoundException e){
-
 			renderException(e)
-
+		}catch(BadRequestException e){
+			renderException(e)
 		}catch (Exception e){
-
 			renderException(e)
 		}
 	}
